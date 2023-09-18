@@ -43,7 +43,7 @@ public class Juego {
             for (int j = -1; j < 2; j++) {
                 try {
                     casillasAround.add(getCasilla(casilla.getX() + i, casilla.getY() + j));
-                } catch (NullPointerException e) {
+                } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
                     System.err.println(e.getMessage());
                 }
             }
@@ -52,7 +52,14 @@ public class Juego {
     }
 
     private Casilla getCasilla(int x, int y) {
-        return (Casilla) vista.getTablero().getComponent(Integer.parseInt(x+""+y));
+        return (Casilla) vista.getTablero().getComponent(casillaPositionToIndex(x, y));
+    }
+
+    private int casillaPositionToIndex(int x, int y) {
+        if (y<0) {
+            y*=-1;
+        }
+        return Integer.parseInt(x+""+y);
     }
 
     private int getNumOfbombs(Casilla casilla) {
