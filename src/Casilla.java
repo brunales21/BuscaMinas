@@ -36,9 +36,9 @@ public class Casilla extends JPanel {
                     if (primeraCasilla == null) {
                         setPrimeraCasilla(getThisInstance());
                     }
-                    desvelarCasilla(isBomb());
+                    desvelarCasilla(isBomb);
                 } else if (isRightButton(e)) {
-                    desvelarFlag(isFlagged());
+                    desvelarFlag();
                 }
             }
 
@@ -73,7 +73,7 @@ public class Casilla extends JPanel {
         super.setBackground(color);
     }
 
-    private void desvelarFlag(boolean isFlagged) {
+    private void desvelarFlag() {
         if (isFlagged()) {
             jlabel.setText("");
             toFlag(false);
@@ -88,13 +88,51 @@ public class Casilla extends JPanel {
 
     private void desvelarCasilla(boolean isBomb) {
         if (isBomb) {
-            setBackground(bombColor);
-            jlabel.setText("B");
+            desvelarBombas();
         } else {
+            //desvelarHuecos();
             jlabel.setText(nearBombs+"");
             select(true);
             setBackground(selectedCasillaColor);
         }
+    }
+
+    private void desvelarHuecos() {
+        /*
+        getCasillasAround().stream()
+                .filter(c -> c.nearBombs == 0)
+                .forEach(a -> {
+                    a.jlabel.setText(nearBombs+"");
+                    a.select(true);
+                    a.setBackground(selectedCasillaColor);
+                });
+
+         */
+    }
+
+    public List<Casilla> getCasillasAround() {
+        List<Casilla> casillasAround = new ArrayList<>();
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                try {
+                    Casilla closeCasilla = tablero
+                            .getCasillaByPosition(new Vector2(position.getX()+i, position.getY()+j));
+                    casillasAround.add(closeCasilla);
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        return casillasAround;
+    }
+
+    private void desvelarBombas() {
+        tablero.getCasillas().stream()
+                .filter(Casilla::isBomb)
+                .forEach(a -> {
+                    jlabel.setText("B");
+                    a.setBackground(bombColor);
+                });
     }
     public boolean isBomb() {
         return isBomb;

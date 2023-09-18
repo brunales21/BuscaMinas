@@ -1,13 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class Tablero extends JPanel {
+    private List<Casilla> casillas;
     private int rows;
     private int cols;
     public Tablero(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         super.setLayout(new GridLayout(rows, cols));
+        this.casillas = new ArrayList<>();
         initTablero();
     }
 
@@ -17,10 +23,10 @@ public class Tablero extends JPanel {
             flag = !flag;
             for (int j = 0; j < getCols(); j++) {
                 if (flag) {
-                    super.add(new Casilla(this, Casilla.color1, new Vector2(i, j)));
+                    addCasilla(new Casilla(this, Casilla.color1, new Vector2(i, j)));
                     flag = false;
                 } else {
-                    super.add(new Casilla(this, Casilla.color2, new Vector2(i, j)));
+                    addCasilla(new Casilla(this, Casilla.color2, new Vector2(i, j)));
                     flag = true;
                 }
             }
@@ -28,14 +34,16 @@ public class Tablero extends JPanel {
         super.revalidate();
     }
 
-    public Casilla getCasillaIndex(int x, int y) throws ArrayIndexOutOfBoundsException {
-        String index = x+""+y;
-        try {
-            return (Casilla) super.getComponent(Integer.parseInt(index));
-        } catch (NumberFormatException e) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+    private void addCasilla(Casilla casilla) {
+        casillas.add(casilla);
+        super.add(casilla);
+    }
 
+    public Casilla getCasillaByPosition(Vector2 position) throws IndexOutOfBoundsException {
+        if (position.getX() < 0 || position.getY()<0 || position.getX()>rows || position.getY()>cols) {
+            throw new IndexOutOfBoundsException();
+        }
+        return casillas.stream().filter(a -> a.getPosition().equals(position)).toList().get(0);
     }
 
     public int getRows() {
@@ -52,5 +60,9 @@ public class Tablero extends JPanel {
 
     public void setCols(int cols) {
         this.cols = cols;
+    }
+
+    public List<Casilla> getCasillas() {
+        return casillas;
     }
 }
