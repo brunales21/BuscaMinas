@@ -96,22 +96,25 @@ public class Casilla extends JPanel {
         if (isBomb) {
             desvelarBombas();
         } else {
-            //desvelarHueco(this);
-            jlabel.setText(nearBombs+"");
+            barrer();
+        }
+    }
+
+    private void barrer() {
+        if (getNearBombs() == 0) {
+            getCasillasAround().stream().filter(a -> !a.isSelected && !a.isBomb).forEach(a -> {
+                a.select(true);
+                a.jlabel.setText(a.nearBombs+"");
+                a.setBackground(selectedCasillaColor);
+                a.barrer();
+
+            });
+        } else {
             select(true);
+            jlabel.setText(nearBombs+"");
             setBackground(selectedCasillaColor);
         }
     }
-/*
-    private void desvelarHueco(Casilla casilla) {
-        List<Casilla> casillasAround = casilla.getCasillasAround();
-        for (Casilla casilla1: casillasAround) {
-            if (!casilla1.isBomb())
-        }
-    }
-
- */
-
     public List<Casilla> getCasillasAround() {
         List<Casilla> casillasAround = new ArrayList<>();
         for (int i = -1; i < 2; i++) {
@@ -127,6 +130,7 @@ public class Casilla extends JPanel {
         }
         return casillasAround;
     }
+
 
     private void desvelarBombas() {
         tablero.getCasillas().stream()

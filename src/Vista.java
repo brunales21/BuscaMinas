@@ -4,7 +4,7 @@ public class Vista {
     private JFrame ventana;
     private Tablero tablero;
     public Vista() {
-        tablero = new Tablero(16, 16);
+        tablero = new Tablero(8, 8);
         initVista();
     }
 

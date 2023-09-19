@@ -7,7 +7,7 @@ public class Juego {
 
     public Juego() {
         this.vista = new Vista();
-        this.cBombs = 100;
+        this.cBombs = 10;
         this.rand = new Random();
 
         do {
