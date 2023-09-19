@@ -23,7 +23,7 @@ public class Casilla extends JPanel {
     private Color flagColor = Color.yellow;
 
     public Casilla() {
-        this.jlabel = new JLabel();
+        this.jlabel = new JLabel("");
         add(jlabel);
         this.isBomb = false;
         this.isSelected = false;
@@ -39,6 +39,9 @@ public class Casilla extends JPanel {
                     desvelarCasilla(isBomb);
                 } else if (isRightButton(e)) {
                     desvelarFlag();
+                    if (gano()) {
+                        System.out.println("Ganastee!!");
+                    }
                 }
             }
 
@@ -73,6 +76,9 @@ public class Casilla extends JPanel {
         super.setBackground(color);
     }
 
+    private boolean gano() {
+        return tablero.getCasillas().stream().filter(Casilla::isBomb).allMatch(Casilla::isFlagged);
+    }
     private void desvelarFlag() {
         if (isFlagged()) {
             jlabel.setText("");
@@ -90,25 +96,21 @@ public class Casilla extends JPanel {
         if (isBomb) {
             desvelarBombas();
         } else {
-            //desvelarHuecos();
+            //desvelarHueco(this);
             jlabel.setText(nearBombs+"");
             select(true);
             setBackground(selectedCasillaColor);
         }
     }
-
-    private void desvelarHuecos() {
-        /*
-        getCasillasAround().stream()
-                .filter(c -> c.nearBombs == 0)
-                .forEach(a -> {
-                    a.jlabel.setText(nearBombs+"");
-                    a.select(true);
-                    a.setBackground(selectedCasillaColor);
-                });
-
-         */
+/*
+    private void desvelarHueco(Casilla casilla) {
+        List<Casilla> casillasAround = casilla.getCasillasAround();
+        for (Casilla casilla1: casillasAround) {
+            if (!casilla1.isBomb())
+        }
     }
+
+ */
 
     public List<Casilla> getCasillasAround() {
         List<Casilla> casillasAround = new ArrayList<>();
@@ -130,8 +132,8 @@ public class Casilla extends JPanel {
         tablero.getCasillas().stream()
                 .filter(Casilla::isBomb)
                 .forEach(a -> {
-                    jlabel.setText("B");
                     a.setBackground(bombColor);
+                    jlabel.setText("B");
                 });
     }
     public boolean isBomb() {
@@ -188,6 +190,10 @@ public class Casilla extends JPanel {
 
     public static Casilla getPrimeraCasilla() {
         return primeraCasilla;
+    }
+
+    public int getNearBombs() {
+        return nearBombs;
     }
 
     @Override

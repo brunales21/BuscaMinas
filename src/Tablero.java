@@ -40,7 +40,7 @@ public class Tablero extends JPanel {
     }
 
     public Casilla getCasillaByPosition(Vector2 position) throws IndexOutOfBoundsException {
-        if (position.getX() < 0 || position.getY()<0 || position.getX()>rows || position.getY()>cols) {
+        if (position.getX()<0 || position.getY()<0 || position.getX()>rows || position.getY()>cols) {
             throw new IndexOutOfBoundsException();
         }
         return casillas.stream().filter(a -> a.getPosition().equals(position)).toList().get(0);

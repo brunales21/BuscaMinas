@@ -7,11 +7,11 @@ public class Juego {
 
     public Juego() {
         this.vista = new Vista();
-        this.cBombs = 200;
+        this.cBombs = 100;
         this.rand = new Random();
 
         do {
-            System.out.println("esperando a primer casilla");
+            System.out.println("Esperando...");
         } while (Casilla.primeraCasilla == null);
 
         insertBombs();
@@ -45,7 +45,8 @@ public class Juego {
     }
 
     private void getAllNumOfBombs() {
-        Arrays.stream(vista.getTablero().getComponents()).forEach(a -> ((Casilla) a).setNearBombs(getNumOfbombs(((Casilla) a))));
+        Arrays.stream(vista.getTablero().getComponents())
+                .forEach(a -> ((Casilla) a).setNearBombs(getNumOfbombs(((Casilla) a))));
     }
 
 }
