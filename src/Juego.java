@@ -46,6 +46,7 @@ public class Juego {
 
     private void getAllNumOfBombs() {
         Arrays.stream(vista.getTablero().getComponents())
+                .filter(a -> !((Casilla) a).isBomb())
                 .forEach(a -> ((Casilla) a).setNearBombs(getNumOfbombs(((Casilla) a))));
     }
 
