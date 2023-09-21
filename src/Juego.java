@@ -10,7 +10,6 @@ public class Juego {
         this.vista = new Vista();
         this.cBombs = 99;
         this.rand = new Random();
-
     }
 
     public static Juego getInstance() {

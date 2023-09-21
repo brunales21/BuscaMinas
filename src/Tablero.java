@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 public class Tablero extends JPanel {
     private List<Casilla> casillas;
+    private int flags;
     private int rows;
     private int cols;
-    public Tablero(int rows, int cols) {
+    public Tablero(int flags, int rows, int cols) {
+        this.flags = flags;
         this.rows = rows;
         this.cols = cols;
         super.setLayout(new GridLayout(rows, cols));
@@ -64,5 +66,9 @@ public class Tablero extends JPanel {
 
     public List<Casilla> getCasillas() {
         return casillas;
+    }
+
+    public int getFlags() {
+        return flags;
     }
 }

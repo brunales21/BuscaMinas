@@ -8,6 +8,7 @@ public class Vista {
     private Tablero tablero;
     private JPanel marcador;
     public Vista() {
+        tablero = new Tablero(99, 20, 24);
         initVista(700, 800);
         initMarcador();
     }
@@ -24,7 +25,6 @@ public class Vista {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Agregar el panel a la ventana
-        tablero = new Tablero(20, 24);
         ventana.add(tablero);
 
         // Hacer visible la ventana
@@ -38,15 +38,12 @@ public class Vista {
         marcador = new JPanel();
         marcador.setPreferredSize(new Dimension(ventanaWidth, 30)); // Ajusta la altura según tus necesidades
 
-        JLabel data = new JLabel("Flags: ");
+        JLabel data = new JLabel("Flags: "+tablero.getFlags());
         marcador.add(data);
         ventana.add(marcador);
 
         ventana.add(marcador, BorderLayout.NORTH);
         ventana.add(tablero, BorderLayout.CENTER);
-
-
-
     }
 
 
