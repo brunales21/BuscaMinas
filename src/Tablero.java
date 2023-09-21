@@ -9,10 +9,12 @@ public class Tablero extends JPanel {
     private Vista vista;
     private List<Casilla> casillas;
     private int flags;
+    private int cBombs;
     private int rows;
     private int cols;
     public Tablero(int flags, int rows, int cols) {
         this.flags = flags;
+        this.cBombs = flags;
         this.rows = rows;
         this.cols = cols;
         this.casillas = new ArrayList<>();
@@ -78,5 +80,9 @@ public class Tablero extends JPanel {
 
     public void setFlags(int flags) {
         this.flags = flags;
+    }
+
+    public int getcBombs() {
+        return cBombs;
     }
 }

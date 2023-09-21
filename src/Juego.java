@@ -3,12 +3,10 @@ import java.util.*;
 public class Juego {
     private static Juego juego;
     private Tablero tablero;
-    private int cBombs;
     private Random rand;
 
     private Juego() {
         this.tablero = new Tablero(40, 14, 18);
-        this.cBombs = tablero.getFlags();
         this.rand = new Random();
     }
 
@@ -25,7 +23,7 @@ public class Juego {
     }
 
     private void insertBombs() {
-        for (int i = 0; i < cBombs; i++) {
+        for (int i = 0; i < tablero.getcBombs(); i++) {
             boolean colocada = false;
             do {
                 int x = rand.nextInt(tablero.getRows());
