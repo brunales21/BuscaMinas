@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Casilla extends JPanel {
-    private Tablero tablero;
+    private Vista vista;
     private Vector2 position;
     private JLabel jlabel;
     private boolean isBomb;
@@ -23,7 +23,7 @@ public class Casilla extends JPanel {
     private Color flagColor = Color.yellow;
 
     public Casilla() {
-        this.jlabel = new JLabel("");
+        this.jlabel = new JLabel();
         add(jlabel);
         this.isBomb = false;
         this.isSelected = false;
@@ -41,9 +41,9 @@ public class Casilla extends JPanel {
                     desvelarCasilla();
                 } else if (isRightClick(e)) {
                     desvelarFlag();
-                    if (gano()) {
-                        System.out.println("Ganastee!!");
-                    }
+                }
+                if (gano()) {
+                    vista.mostrarMensajeVictoria();
                 }
             }
 
@@ -70,30 +70,31 @@ public class Casilla extends JPanel {
         });
     }
 
-    public Casilla(Tablero tablero, Color color, Vector2 position) {
+    public Casilla(Vista vista, Color color, Vector2 position) {
         this();
-        this.tablero = tablero;
+        this.vista = vista;
         this.position = position;
         this.casillaColor = color;
         super.setBackground(color);
     }
 
     private boolean gano() {
-        return tablero.getCasillas().stream().filter(Casilla::isBomb).allMatch(c -> c.isFlagged && c.isSelected);
+        return vista.getTablero().getCasillas().stream().filter(Casilla::isBomb).allMatch(c -> c.isFlagged)
+                && vista.getTablero().getCasillas().stream().filter(c -> !c.isBomb).allMatch(c -> c.isSelected);
     }
     private void desvelarFlag() {
         if (isSelected) {
             return;
         }
-        if (isFlagged()) {
+        if (isFlagged) {
             jlabel.setText("");
-            toFlag(false);
             setBackground(casillaColor);
         } else {
             jlabel.setText("F");
-            toFlag(true);
             setBackground(flagColor);
         }
+        updateNOfFlags();
+        isFlagged = !isFlagged;
     }
 
 
@@ -110,7 +111,6 @@ public class Casilla extends JPanel {
         isSelected = true;
         jlabel.setText(String.valueOf(nearBombs));
         setBackground(selectedCasillaColor);
-        //tablero.revalidate();
     }
 
     private void barrer() {
@@ -129,11 +129,11 @@ public class Casilla extends JPanel {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 try {
-                    Casilla closeCasilla = tablero
+                    Casilla closeCasilla = vista.getTablero()
                             .getCasillaByPosition(new Vector2(position.getX()+i, position.getY()+j));
                     casillasAround.add(closeCasilla);
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println(e.getMessage());
+                    //System.out.println(e.getMessage());
                 }
             }
         }
@@ -142,12 +142,23 @@ public class Casilla extends JPanel {
 
 
     private void desvelarBombas() {
-        tablero.getCasillas().stream()
+        vista.getTablero().getCasillas().stream()
                 .filter(Casilla::isBomb)
                 .forEach(a -> {
                     a.setBackground(bombColor);
                     jlabel.setText("B");
                 });
+        vista.mostrarMensajeDerrota();
+    }
+
+    private void updateNOfFlags() {
+        if (isFlagged) {
+            vista.getData().setText("Flags: " + (vista.getTablero().getFlags() + 1));
+            vista.getTablero().setFlags(vista.getTablero().getFlags() + 1);
+        } else {
+            vista.getData().setText("Flags: " + (vista.getTablero().getFlags() - 1));
+            vista.getTablero().setFlags(vista.getTablero().getFlags() - 1);
+        }
     }
     public boolean isBomb() {
         return isBomb;

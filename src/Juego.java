@@ -2,13 +2,13 @@ import java.util.*;
 
 public class Juego {
     private static Juego juego;
-    private Vista vista;
+    private Tablero tablero;
     private int cBombs;
     private Random rand;
 
     private Juego() {
-        this.vista = new Vista();
-        this.cBombs = 99;
+        this.tablero = new Tablero(40, 14, 18);
+        this.cBombs = tablero.getFlags();
         this.rand = new Random();
     }
 
@@ -28,9 +28,9 @@ public class Juego {
         for (int i = 0; i < cBombs; i++) {
             boolean colocada = false;
             do {
-                int x = rand.nextInt(vista.getTablero().getRows());
-                int y = rand.nextInt(vista.getTablero().getCols());
-                Casilla casilla = vista.getTablero().getCasillaByPosition(new Vector2(x, y));
+                int x = rand.nextInt(tablero.getRows());
+                int y = rand.nextInt(tablero.getCols());
+                Casilla casilla = tablero.getCasillaByPosition(new Vector2(x, y));
                 if (isValidPosition(casilla)) {
                     casilla.setBomb(true);
                     colocada = true;
@@ -51,7 +51,7 @@ public class Juego {
     }
 
     private void getAllNumOfBombs() {
-        vista.getTablero().getCasillas().stream()
+        tablero.getCasillas().stream()
                 .filter(a -> !a.isBomb())
                 .forEach(a -> a.setNearBombs(getNumOfbombs(a)));
     }

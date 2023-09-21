@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 
 public class Tablero extends JPanel {
+    private Vista vista;
     private List<Casilla> casillas;
     private int flags;
     private int rows;
@@ -14,21 +15,24 @@ public class Tablero extends JPanel {
         this.flags = flags;
         this.rows = rows;
         this.cols = cols;
-        super.setLayout(new GridLayout(rows, cols));
         this.casillas = new ArrayList<>();
+
+        vista = new Vista(this);
         initTablero();
+
+        super.setLayout(new GridLayout(rows, cols));
     }
 
     private void initTablero() {
         boolean flag = true;
-        for (int i = 0; i < getRows(); i++) {
+        for (int i = 0; i < rows; i++) {
             flag = !flag;
-            for (int j = 0; j < getCols(); j++) {
+            for (int j = 0; j < cols; j++) {
                 if (flag) {
-                    addCasilla(new Casilla(this, Casilla.color1, new Vector2(i, j)));
+                    addCasilla(new Casilla(this.vista, Casilla.color1, new Vector2(i, j)));
                     flag = false;
                 } else {
-                    addCasilla(new Casilla(this, Casilla.color2, new Vector2(i, j)));
+                    addCasilla(new Casilla(this.vista, Casilla.color2, new Vector2(i, j)));
                     flag = true;
                 }
             }
@@ -70,5 +74,9 @@ public class Tablero extends JPanel {
 
     public int getFlags() {
         return flags;
+    }
+
+    public void setFlags(int flags) {
+        this.flags = flags;
     }
 }

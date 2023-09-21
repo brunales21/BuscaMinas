@@ -7,9 +7,10 @@ public class Vista {
     private int ventanaHeight;
     private Tablero tablero;
     private JPanel marcador;
-    public Vista() {
-        tablero = new Tablero(99, 20, 24);
-        initVista(700, 800);
+    private JLabel data;
+    public Vista(Tablero tablero) {
+        this.tablero = tablero;
+        initVista(700, 700);
         initMarcador();
     }
 
@@ -38,7 +39,7 @@ public class Vista {
         marcador = new JPanel();
         marcador.setPreferredSize(new Dimension(ventanaWidth, 30)); // Ajusta la altura según tus necesidades
 
-        JLabel data = new JLabel("Flags: "+tablero.getFlags());
+        data = new JLabel("Flags: "+tablero.getFlags());
         marcador.add(data);
         ventana.add(marcador);
 
@@ -46,7 +47,13 @@ public class Vista {
         ventana.add(tablero, BorderLayout.CENTER);
     }
 
+    public void mostrarMensajeVictoria() {
+        JOptionPane.showMessageDialog(ventana, "¡Has ganado! Felicidades", "Victoria", JOptionPane.INFORMATION_MESSAGE);
+    }
 
+    public void mostrarMensajeDerrota() {
+        JOptionPane.showMessageDialog(ventana, "¡Pisaste una bomba!\nSuerte la proxima vez.", "Derrota", JOptionPane.ERROR_MESSAGE);
+    }
     public JFrame getVentana() {
         return ventana;
     }
@@ -63,4 +70,15 @@ public class Vista {
         this.tablero = tablero;
     }
 
+    public JPanel getMarcador() {
+        return marcador;
+    }
+
+    public JLabel getData() {
+        return data;
+    }
+
+    public void setData(JLabel data) {
+        this.data = data;
+    }
 }
