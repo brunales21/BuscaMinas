@@ -1,19 +1,26 @@
 import java.util.*;
 
 public class Juego {
+    private static Juego juego;
     private Vista vista;
     private int cBombs;
     private Random rand;
 
-    public Juego() {
+    private Juego() {
         this.vista = new Vista();
         this.cBombs = 10;
         this.rand = new Random();
 
-        do {
-            System.out.println("Esperando...");
-        } while (Casilla.primeraCasilla == null);
+    }
 
+    public static Juego getInstance() {
+        if (juego == null) {
+            juego = new Juego();
+        }
+        return juego;
+    }
+
+    public void init() {
         insertBombs();
         getAllNumOfBombs();
     }
@@ -45,9 +52,9 @@ public class Juego {
     }
 
     private void getAllNumOfBombs() {
-        Arrays.stream(vista.getTablero().getComponents())
-                .filter(a -> !((Casilla) a).isBomb())
-                .forEach(a -> ((Casilla) a).setNearBombs(getNumOfbombs(((Casilla) a))));
+        vista.getTablero().getCasillas().stream()
+                .filter(a -> !a.isBomb())
+                .forEach(a -> a.setNearBombs(getNumOfbombs(a)));
     }
 
 }

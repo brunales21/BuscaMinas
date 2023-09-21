@@ -32,12 +32,14 @@ public class Casilla extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (isLeftButton(e)) {
+
+                if (isLeftClick(e)) {
                     if (primeraCasilla == null) {
                         setPrimeraCasilla(getThisInstance());
+                        Juego.getInstance().init();
                     }
-                    desvelarCasilla(isBomb);
-                } else if (isRightButton(e)) {
+                    desvelarCasilla();
+                } else if (isRightClick(e)) {
                     desvelarFlag();
                     if (gano()) {
                         System.out.println("Ganastee!!");
@@ -77,9 +79,12 @@ public class Casilla extends JPanel {
     }
 
     private boolean gano() {
-        return tablero.getCasillas().stream().filter(Casilla::isBomb).allMatch(Casilla::isFlagged);
+        return tablero.getCasillas().stream().filter(Casilla::isBomb).allMatch(c -> c.isFlagged && c.isSelected);
     }
     private void desvelarFlag() {
+        if (isSelected) {
+            return;
+        }
         if (isFlagged()) {
             jlabel.setText("");
             toFlag(false);
@@ -92,27 +97,31 @@ public class Casilla extends JPanel {
     }
 
 
-    private void desvelarCasilla(boolean isBomb) {
+    private void desvelarCasilla() {
         if (isBomb) {
             desvelarBombas();
         } else {
             barrer();
         }
+
+    }
+
+    private void destapar() {
+        isSelected = true;
+        jlabel.setText(String.valueOf(nearBombs));
+        setBackground(selectedCasillaColor);
+        //tablero.revalidate();
     }
 
     private void barrer() {
-        if (getNearBombs() == 0) {
-            getCasillasAround().stream().filter(a -> !a.isSelected && !a.isBomb).forEach(a -> {
-                a.select(true);
-                a.jlabel.setText(a.nearBombs+"");
-                a.setBackground(selectedCasillaColor);
-                a.barrer();
-
-            });
+        if (isBomb) {
+            return;
+        }
+        if (nearBombs == 0) {
+            destapar();
+            getCasillasAround().stream().filter(a -> !a.isSelected).forEach(Casilla::barrer);
         } else {
-            select(true);
-            jlabel.setText(nearBombs+"");
-            setBackground(selectedCasillaColor);
+            destapar();
         }
     }
     public List<Casilla> getCasillasAround() {
@@ -164,11 +173,11 @@ public class Casilla extends JPanel {
         isFlagged = flagged;
     }
 
-    private boolean isLeftButton(MouseEvent e) {
+    private boolean isLeftClick(MouseEvent e) {
         return e.getButton() == MouseEvent.BUTTON1;
     }
 
-    private boolean isRightButton(MouseEvent e) {
+    private boolean isRightClick(MouseEvent e) {
         return e.getButton() == MouseEvent.BUTTON3;
     }
 

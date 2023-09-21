@@ -1,19 +1,23 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Vista {
     private JFrame ventana;
+    private int ventanaWidth;
+    private int ventanaHeight;
     private Tablero tablero;
+    private JFrame marcador;
     public Vista() {
-        tablero = new Tablero(8, 8);
-        initVista();
+        tablero = new Tablero(12, 6);
+        initVista(700, 1200);
     }
 
-    private void initVista() {
+    private void initVista(int ventanaWidth, int ventanaHeight) {
         // Crear un objeto JFrame (ventana principal)
         ventana = new JFrame("Mi Ventana");
 
         // Establecer el tamaño de la ventana
-        ventana.setSize(700, 700);
+        ventana.setSize(ventanaWidth, ventanaHeight);
 
         // Establecer operación de cierre por defecto
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,6 +30,16 @@ public class Vista {
 
         // Centrar la ventana en la pantalla
         ventana.setLocationRelativeTo(null);
+    }
+
+    private void initMarcador() {
+        marcador = new JFrame("Marcador");
+        marcador.setSize(ventanaWidth, 100);
+        JLabel data = new JLabel("Flags: ");
+        data.setBackground(Color.BLACK);
+        marcador.add(data);
+        ventana.add(marcador);
+
     }
 
 
