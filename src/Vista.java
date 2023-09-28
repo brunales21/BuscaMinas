@@ -7,7 +7,7 @@ public class Vista {
     private int ventanaHeight;
     private Tablero tablero;
     private JPanel marcador;
-    private JLabel data;
+    private JLabel dataField;
     public Vista(Tablero tablero) {
         this.tablero = tablero;
         initVista(700, 700);
@@ -39,8 +39,13 @@ public class Vista {
         marcador = new JPanel();
         marcador.setPreferredSize(new Dimension(ventanaWidth, 30)); // Ajusta la altura según tus necesidades
 
-        data = new JLabel("Flags: "+tablero.getFlags());
-        marcador.add(data);
+        dataField = new JLabel("Flags: "+tablero.getFlags());
+        // Crear una fuente con un tamaño mayor
+        Font font = new Font(dataField.getFont().getName(), Font.PLAIN, 15); // Tamaño de fuente 24
+
+        // Establecer la fuente en el JLabel
+        dataField.setFont(font);
+        marcador.add(dataField);
         ventana.add(marcador);
 
         ventana.add(marcador, BorderLayout.NORTH);
@@ -74,11 +79,11 @@ public class Vista {
         return marcador;
     }
 
-    public JLabel getData() {
-        return data;
+    public JLabel getDataField() {
+        return dataField;
     }
 
-    public void setData(JLabel data) {
-        this.data = data;
+    public void setDataField(JLabel dataField) {
+        this.dataField = dataField;
     }
 }

@@ -99,6 +99,10 @@ public class Casilla extends JPanel {
 
 
     private void desvelarCasilla() {
+        if (isFlagged) {
+            return;
+        }
+
         if (isBomb) {
             desvelarBombas();
         } else {
@@ -153,10 +157,10 @@ public class Casilla extends JPanel {
 
     private void updateNOfFlags() {
         if (isFlagged) {
-            vista.getData().setText("Flags: " + (vista.getTablero().getFlags() + 1));
+            vista.getDataField().setText("Flags: " + (vista.getTablero().getFlags() + 1));
             vista.getTablero().setFlags(vista.getTablero().getFlags() + 1);
         } else {
-            vista.getData().setText("Flags: " + (vista.getTablero().getFlags() - 1));
+            vista.getDataField().setText("Flags: " + (vista.getTablero().getFlags() - 1));
             vista.getTablero().setFlags(vista.getTablero().getFlags() - 1);
         }
     }
